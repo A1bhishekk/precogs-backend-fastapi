@@ -15,6 +15,12 @@ templates=Jinja2Templates(directory="templates")
 async def read_static(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
    
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+@app.get("/")
+def read_item():
+    return {
+        "name": "Hello World",
+        "description": "This is a very nice description",
+        "price": 35.4,
+        "tax": 3.2,
+        
+    }
