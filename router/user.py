@@ -19,7 +19,7 @@ def create_user(request:UserBase,db:Session=Depends(get_db)):
     return db_user.create_user(db,request)
 
 
-# GET ALL USERS
-@router.get('/',status_code=status.HTTP_200_OK,response_model=list[UserDisplay],summary="Get all users",)
-def get_all_users(db:Session=Depends(get_db)):
-    return db_user.get_all_users(db)
+# # GET ALL USERS
+# @router.get('/',status_code=status.HTTP_200_OK,response_model=list[UserDisplay],summary="Get all users",)
+# def get_all_users(db:Session=Depends(get_db)):
+#     return db_user.get_all_users(db)
