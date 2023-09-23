@@ -1,26 +1,33 @@
-from typing import Union
-from fastapi import FastAPI, Request
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
+from fastapi import FastAPI
+from db import models
+from db.database import engine
+from router import user
+from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
-templates=Jinja2Templates(directory="templates")
+app = FastAPI(
+    title="Precogs Backend API",
+    description="This is a precogs api, with auto docs for the API and everything",
+    version="0.1",
+    docs_url="/",
+)
+app.include_router(user.router)
+# app.include_router(project.router)
+
+# CORS
+origins = [
+    'http://localhost:3000',
+    'http://localhost:8000',
+    "https://github.com"
+]
 
 
+# add middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["*"],
+)
 
-
-
-@app.get("/", response_class=HTMLResponse)
-async def read_static(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
-   
-@app.get("/items")
-def read_item():
-    return {
-        "name": "Hello World",
-        "description": "This is a very nice description",
-        "price": 35.4,
-        "tax": 3.2,
-
-    }
+models.Base.metadata.create_all(engine)
